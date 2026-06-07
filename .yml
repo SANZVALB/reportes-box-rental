@@ -1,4 +1,0 @@
-JWT_SECRET=boxrental_2026_secret_key
-NODE_ENV=development
-MONGO_URI=mongodb://mongo:27017/boxrental
-PORT=3000
