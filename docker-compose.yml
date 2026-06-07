@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+
+  # ── FRONTEND: Angular ──────────────────────────────
+  frontend:
+    build: ./frontend
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+  # ── BACKEND: Node + Express ────────────────────────
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/boxrental
+      - JWT_SECRET=${JWT_SECRET}
+      - PORT=3000
+    env_file:
+      - .env
+
+  # ── BASE DE DATOS: MongoDB ─────────────────────────
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=boxrental
+
+volumes:
+  mongo_data:

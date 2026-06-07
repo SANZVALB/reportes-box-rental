@@ -1,0 +1,20 @@
+# Variables de entorno - NUNCA subir a GitHub
+.env
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Angular
+frontend/dist/
+frontend/.angular/
+
+# Docker
+mongo_data/
+
+# VS Code
+.vscode/
+
+# Windows
+Thumbs.db
+desktop.ini
