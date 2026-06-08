@@ -1,0 +1,51 @@
+<div class="login-wrapper">
+  <div class="login-card">
+
+    <!-- Logo -->
+    <div class="logo-zone">
+      <div class="logo-box">
+        <span class="logo-text">BOX RENTAL S.A.</span>
+      </div>
+      <h1>Reportes Financieros</h1>
+      <p>Ingresá con tu cuenta para continuar</p>
+    </div>
+
+    <!-- Formulario -->
+    <div class="form-group">
+      <label>Email</label>
+      <input
+        type="email"
+        [(ngModel)]="email"
+        placeholder="usuario@boxrental.com"
+        (keyup.enter)="login()"
+      />
+    </div>
+
+    <div class="form-group">
+      <label>Contraseña</label>
+      <input
+        type="password"
+        [(ngModel)]="password"
+        placeholder="••••••••"
+        (keyup.enter)="login()"
+      />
+    </div>
+
+    @if (error()) {
+      <div class="error-msg">{{ error() }}</div>
+    }
+
+    <button
+      class="btn-login"
+      (click)="login()"
+      [disabled]="cargando()"
+    >
+      {{ cargando() ? 'Ingresando...' : 'Ingresar' }}
+    </button>
+
+    <div class="footer-firma">
+      Desarrollado por <strong>Sanzval</strong>
+    </div>
+
+  </div>
+</div>
