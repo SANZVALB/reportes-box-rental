@@ -1,0 +1,18 @@
+<nav class="navbar">
+  <div class="navbar-brand">
+    <div class="logo-box">
+      <span>BOX RENTAL S.A.</span>
+    </div>
+    <span class="app-title">Reportes Financieros</span>
+  </div>
+
+  <div class="navbar-user">
+    @if (usuario()) {
+      <div class="user-info">
+        <span class="user-name">{{ usuario()!.nombre }}</span>
+        <span class="user-rol">{{ usuario()!.rol }}</span>
+      </div>
+      <button class="btn-logout" (click)="logout()">Salir</button>
+    }
+  </div>
+</nav>

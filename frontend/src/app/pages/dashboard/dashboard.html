@@ -1,1 +1,51 @@
-<p>dashboard works!</p>
+<app-navbar />
+<app-sidebar />
+
+<main class="main-content">
+
+  <!-- Bienvenida -->
+  <div class="welcome">
+    <h2>Bienvenido, {{ usuario()?.nombre }}</h2>
+    <span class="rol-badge">{{ usuario()?.rol }}</span>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Reportes totales</div>
+      <div class="kpi-value">0</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Procesados hoy</div>
+      <div class="kpi-value">0</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">Usuarios activos</div>
+      <div class="kpi-value">1</div>
+    </div>
+  </div>
+
+  <!-- Accesos rápidos según rol -->
+  <div class="accesos">
+    <h3>Accesos rápidos</h3>
+    <div class="accesos-grid">
+      @if (auth.tieneRol('desarrollador', 'administrador', 'operador')) {
+        <div class="acceso-card">
+          <span class="acceso-icon">📂</span>
+          <span>Subir reporte Excel</span>
+        </div>
+      }
+      <div class="acceso-card">
+        <span class="acceso-icon">📋</span>
+        <span>Ver mis reportes</span>
+      </div>
+      @if (auth.tieneRol('desarrollador', 'administrador')) {
+        <div class="acceso-card">
+          <span class="acceso-icon">👥</span>
+          <span>Gestionar usuarios</span>
+        </div>
+      }
+    </div>
+  </div>
+
+</main>
