@@ -1,0 +1,62 @@
+<app-navbar />
+<app-sidebar />
+
+<main class="main-content">
+  <div class="page-header">
+    <div>
+      <h2>Mis Reportes</h2>
+      <p>Historial de archivos procesados</p>
+    </div>
+    @if (auth.tieneRol('desarrollador', 'administrador', 'operador')) {
+      <a class="btn-nuevo" routerLink="/reportes/nuevo">+ Nuevo reporte</a>
+    }
+  </div>
+
+  @if (cargando()) {
+    <div class="estado">Cargando reportes...</div>
+  } @else if (error()) {
+    <div class="estado error">{{ error() }}</div>
+  } @else if (reportes().length === 0) {
+    <div class="vacio">
+      <span>📋</span>
+      <p>No hay reportes todavía</p>
+    </div>
+  } @else {
+    <div class="tabla-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Período</th>
+            <th>Filas</th>
+            <th>Monto total</th>
+            <th>Creado por</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of reportes(); track r._id) {
+            <tr (click)="verDetalle(r._id)" class="fila">
+              <td class="nombre">{{ r.nombre }}</td>
+              <td><span class="badge">{{ r.tipo }}</span></td>
+              <td>{{ r.resumen?.periodo || '-' }}</td>
+              <td>{{ r.resumen?.totalFilas || 0 }}</td>
+              <td class="monto">${{ formatMonto(r.resumen?.totalMonto) }}</td>
+              <td>{{ r.creadoPor?.nombre }}</td>
+              <td>{{ formatFecha(r.createdAt) }}</td>
+              <td><span class="estado-badge" [class]="r.estado">{{ r.estado }}</span></td>
+              <td>
+                @if (auth.tieneRol('desarrollador', 'administrador')) {
+                  <button class="btn-eliminar" (click)="eliminar(r._id, $event)">🗑</button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</main>
