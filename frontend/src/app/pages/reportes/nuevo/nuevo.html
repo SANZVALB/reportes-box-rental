@@ -1,0 +1,66 @@
+<app-navbar />
+<app-sidebar />
+
+<main class="main-content">
+  <div class="page-header">
+    <h2>Subir Reporte Excel</h2>
+    <p>Procesá un archivo .xlsx y visualizá los resultados automáticamente</p>
+  </div>
+
+  <div class="upload-card">
+
+    <!-- Zona de drop -->
+    <div
+      class="drop-zone"
+      [class.dragover]="dragOver()"
+      [class.has-file]="archivo()"
+      (dragover)="dragOver.set(true); $event.preventDefault()"
+      (dragleave)="dragOver.set(false)"
+      (drop)="onDrop($event)"
+      (click)="fileInput.click()"
+    >
+      @if (archivo()) {
+        <div class="file-info">
+          <span class="file-icon">📊</span>
+          <span class="file-name">{{ archivo()!.name }}</span>
+          <span class="file-size">{{ (archivo()!.size / 1024).toFixed(1) }} KB</span>
+        </div>
+      } @else {
+        <div class="drop-placeholder">
+          <span class="drop-icon">📂</span>
+          <p>Arrastrá tu archivo Excel acá</p>
+          <span>o hacé clic para seleccionar</span>
+        </div>
+      }
+      <input #fileInput type="file" accept=".xlsx,.xls" (change)="onFileChange($event)" hidden>
+    </div>
+
+    <!-- Formulario -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nombre del reporte</label>
+        <input type="text" [(ngModel)]="nombre" placeholder="Ej: Presupuesto Q1 2026" />
+      </div>
+      <div class="form-group">
+        <label>Tipo de reporte</label>
+        <select [(ngModel)]="tipo">
+          <option value="presupuesto">Presupuesto</option>
+          <option value="pagos">Pagos</option>
+          <option value="ocupacion">Ocupación</option>
+        </select>
+      </div>
+    </div>
+
+    @if (error()) {
+      <div class="msg error">{{ error() }}</div>
+    }
+    @if (exito()) {
+      <div class="msg exito">✓ {{ exito() }}</div>
+    }
+
+    <button class="btn-subir" (click)="subir()" [disabled]="cargando()">
+      {{ cargando() ? 'Procesando...' : 'Procesar archivo' }}
+    </button>
+
+  </div>
+</main>

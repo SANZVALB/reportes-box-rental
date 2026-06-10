@@ -8,7 +8,7 @@ const reporteSchema = new mongoose.Schema({
   },
   tipo: {
     type: String,
-    enum: ['pagos', 'ocupacion', 'mixto'],
+    enum: ['presupuesto', 'pagos', 'ocupacion', 'mixto'],
     required: true
   },
   archivoOriginal: {
