@@ -1,1 +1,101 @@
-<p>detalle works!</p>
+<app-navbar />
+<app-sidebar />
+
+<main class="main-content">
+  @if (cargando()) {
+    <div class="estado">Cargando reporte...</div>
+  } @else if (error()) {
+    <div class="estado error">{{ error() }}</div>
+  } @else {
+
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <button class="btn-volver" (click)="volver()">← Volver</button>
+        <h2>{{ reporte().nombre }}</h2>
+        <p>{{ reporte().resumen?.periodo }} · {{ reporte().resumen?.totalFilas }} filas</p>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filtros">
+      <div class="filtro-group">
+        <label>Trimestre</label>
+        <select [value]="trimestreSel()" (change)="trimestreSel.set($any($event.target).value); conceptoSel.set('TODOS')">
+          <option value="TODOS">Todos</option>
+          @for (t of trimestres; track t) {
+            <option [value]="t">{{ t }}</option>
+          }
+        </select>
+      </div>
+      <div class="filtro-group">
+        <label>Grupo</label>
+        <select [value]="grupoSel()" (change)="grupoSel.set($any($event.target).value); conceptoSel.set('TODOS')">
+          <option value="TODOS">Todos</option>
+          @for (g of grupos; track g) {
+            <option [value]="g">{{ g }}</option>
+          }
+        </select>
+      </div>
+      <div class="filtro-group">
+        <label>Concepto</label>
+        <select [value]="conceptoSel()" (change)="conceptoSel.set($any($event.target).value)">
+          <option value="TODOS">Todos</option>
+          @for (c of conceptosDisponibles(); track c) {
+            <option [value]="c">{{ c }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Monto vista activa</div>
+        <div class="kpi-value">${{ formatMonto(montoTotal()) }}</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Filas filtradas</div>
+        <div class="kpi-value">{{ datosFiltrados().length }}</div>
+      </div>
+      <div class="kpi-card purple">
+        <div class="kpi-label">Grupos</div>
+        <div class="kpi-value">{{ porGrupo().length }}</div>
+      </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="graficos-grid">
+
+      <!-- Barras por grupo -->
+      <div class="chart-card">
+        <div class="chart-title">Distribución por Grupo</div>
+        @for (g of porGrupo(); track g.grupo) {
+          <div class="barra-item">
+            <div class="barra-label">{{ g.grupo }}</div>
+            <div class="barra-bg">
+              <div class="barra-fill" [style.width]="g.pct + '%'"></div>
+            </div>
+            <div class="barra-val">${{ formatMonto(g.monto) }}</div>
+          </div>
+        }
+      </div>
+
+      <!-- Top 10 conceptos -->
+      <div class="chart-card">
+        <div class="chart-title">Top 10 Conceptos</div>
+        @for (c of porConcepto(); track c.concepto) {
+          <div class="barra-item">
+            <div class="barra-label small">{{ c.concepto }}</div>
+            <div class="barra-bg">
+              <div class="barra-fill purple" [style.width]="(c.monto / maxBarra() * 100) + '%'"></div>
+            </div>
+            <div class="barra-val">${{ formatMonto(c.monto) }}</div>
+          </div>
+        }
+      </div>
+
+    </div>
+
+  }
+</main>
